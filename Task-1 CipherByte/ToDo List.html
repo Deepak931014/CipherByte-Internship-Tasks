@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <title>Task-1 Todo List</title>
+</head>
+
+<body class="flex items-center justify-center h-screen bg-blue-300">
+    <div class="min-h-[650px] w-[375px] bg-white flex flex-col items-center gap-4 p-5 rounded-2xl shadow-lg">
+        <h1 class="bg-blue-700 w-full text-white flex items-center justify-center h-14 mt-8 rounded-lg font-poppins">
+            ToDo List
+        </h1>
+        <div class="flex items-center justify-between w-[350px] h-14">
+            <input id="input-box" type="text" placeholder="Enter your task..." class="border-b border-gray-600 w-[250px] text-lg font-poppins outline-none p-2">
+            <button class="text-2xl h-10 w-10 rounded-full border-2 border-blue-700 text-white bg-blue-700 transition-all duration-400 hover:text-blue-700 hover:bg-white">
+                +
+            </button>
+        </div>
+        <div class="w-[350px] flex flex-col items-center gap-2">
+            <!----
+              Main Todo List
+            -->
+        </div>
+    </div>
+
+    <script>
+        const newTask = document.querySelector("#input-box");
+        const taskList = document.querySelector(".flex-col");
+        const addTaskBtn = document.querySelector("button");
+        const date = new Date();
+        const d = date.getDate();
+        const m = date.getMonth() + 1; // Correct month to be 1-indexed
+        const y = date.getFullYear();
+        const taskAddedDate = `${d}/${m}/${y}`;
+
+        console.log(taskAddedDate);
+
+        addTaskBtn.addEventListener("click", () => {
+            if (newTask.value === "") {
+                alert("Enter your task before adding.");
+            } else {
+                let todoTask = document.createElement("div");
+                todoTask.classList.add("flex", "items-center", "justify-between", "border-b", "border-gray-400", "w-full", "py-2");
+                todoTask.innerHTML = `
+                    <div class="flex items-center justify-between w-[285px] gap-4">
+                        <input type="checkbox" id="taskCompleted" class="h-4 w-4 mr-2">
+                        <div class="flex-1 text-lg font-poppins font-medium break-words">
+                            <p>${newTask.value}</p>
+                        </div>
+                        <p id="date" class="text-sm font-poppins text-gray-700">${taskAddedDate}</p>
+                    </div>
+                    <button class="delete-icon flex items-center justify-center border-none rounded-full h-9 w-9 bg-white transition-all duration-300 hover:text-red-600 hover:bg-gray-300">
+                        <i class="bi bi-trash3 text-lg"></i>
+                    </button>`;
+
+                taskList.appendChild(todoTask);
+
+                // deleteBtn
+                todoTask.querySelector(".delete-icon").addEventListener("click", () => {
+                    todoTask.remove();
+                });
+
+                // taskCompleted-checkbox
+                todoTask.querySelector("#taskCompleted").addEventListener("click", () => {
+                    todoTask.classList.toggle("line-through");
+                    todoTask.classList.toggle("text-green-600");
+                });
+            }
+            newTask.value = "";
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WeatherVue</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-yellow-600 flex justify-center items-center h-screen">
+    <div class="card bg-gradient-to-br from-white to-yellow-900 text-white p-8 rounded-2xl w-full max-w-lg mx-auto shadow-lg">
+        <div class="search flex items-center space-x-4 mb-8">
+            <input type="text" placeholder="Enter city name" spellcheck="false" class="flex-1 p-4 rounded-full border-none outline-none text-gray-700">
+            <button class="bg-white p-4 rounded-full flex items-center justify-center cursor-pointer">
+                <img src="images/search.png" class="w-4 h-4">
+            </button>
+        </div>
+        <div class="weather text-center">
+            <img src="images/rain.png" class="weather-icon w-32 mx-auto mb-6">
+            <h1 class="temp text-6xl font-semibold">22°c</h1>
+            <h2 class="city text-4xl font-medium mt-2">New York</h2>
+            <div class="details flex justify-between items-center mt-8">
+                <div class="col flex items-center space-x-2">
+                    <img src="images/humidity.png" class="w-10">
+                    <div>
+                        <p class="humidity text-2xl">50%</p>
+                        <p>Humidity</p>
+                    </div>
+                </div>
+                <div class="col flex items-center space-x-2">
+                    <img src="images/wind.png" class="w-10">
+                    <div>
+                        <p class="wind text-2xl">15 km/hr</p>
+                        <p>Wind Speed</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const apiKey = "fe2006529be825ab1d6a6a9257fc1571";
+        const apiUrl = "https://api.openweathermap.org/data/2.5/weather?&units=metric&q=";
+        const searchBox = document.querySelector(".search input");
+        const searchBtn = document.querySelector(".search button");
+        const weatherIcon = document.querySelector(".weather-icon");
+
+        async function checkWeather(city) {
+            const response = await fetch(apiUrl + city + `&appid=${apiKey}`);
+            var data = await response.json();
+            console.log(data);
+            document.querySelector(".city").innerHTML = data.name;
+            document.querySelector(".temp").innerHTML = Math.round(data.main.temp) + "°c";
+            document.querySelector(".humidity").innerHTML = data.main.humidity + "%";
+            document.querySelector(".wind").innerHTML = data.wind.speed + " km/hr";
+
+            if (data.weather[0].main === "Clouds") {
+                weatherIcon.src = "images/clouds.png";
+            } else if (data.weather[0].main === "Clear") {
+                weatherIcon.src = "images/clear.png";
+            } else if (data.weather[0].main === "Rain") {
+                weatherIcon.src = "images/rain.png";
+            } else if (data.weather[0].main === "Haze") {
+                weatherIcon.src = "images/drizzle.png";
+            } else if (data.weather[0].main === "Mist") {
+                weatherIcon.src = "images/mist.png";
+            }
+        }
+
+        searchBtn.addEventListener("click", () => {
+            checkWeather(searchBox.value);
+        });
+    </script>
+</body>
+</html>
